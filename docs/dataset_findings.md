@@ -179,3 +179,30 @@ diagnosis).
 I'd lean toward **B** if you want some external signal at all, clearly
 labeled as exploratory - but this is exactly the kind of call the project
 brief said should come back to you rather than being decided silently.
+
+## Candidate healthy-comparison dataset: Acevedo et al. (Mendeley Data)
+
+You correctly pointed out that neither option above actually solves the
+deeper problem: erythrocytesIDB has no healthy/normal-donor population at
+all, so external validation can't properly test specificity (the "this is a
+normal patient" side of the task) no matter how we slice it. You suggested
+checking https://data.mendeley.com/datasets/snkd93bnjr/1 (Acevedo et al.,
+"A dataset of microscopic peripheral blood cell images for development of
+automatic recognition systems," *Data in Brief*, 2020) as a possible source
+of isolated normal red blood cell images.
+
+**Status: unverified, pending your Colab run.** `data.mendeley.com` is
+blocked by this development session's network policy, the same as Kaggle and
+Zenodo were, so I could not inspect it directly. From memory - not confirmed
+- I recall this dataset's labeled classes are mostly white blood cell types
+(neutrophils, eosinophils, basophils, lymphocytes, monocytes, immature
+granulocytes) plus platelets plus erythroblasts (immature, nucleated red
+cell precursors - not mature biconcave red blood cells), which would mean it
+may *not* contain a dedicated normal-mature-erythrocyte class. This is only
+a recollection and could be wrong.
+
+Added Section 8 to the Colab notebook to check this for real, using Colab's
+own (unrestricted) internet access rather than guessing further. It attempts
+an automated check of the dataset page, with manual fallback instructions if
+the page doesn't expose enough in raw HTML. Flagged in the notebook as a
+larger download (~1-2 GB) worth confirming is worthwhile before running.
