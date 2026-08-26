@@ -206,3 +206,47 @@ own (unrestricted) internet access rather than guessing further. It attempts
 an automated check of the dataset page, with manual fallback instructions if
 the page doesn't expose enough in raw HTML. Flagged in the notebook as a
 larger download (~1-2 GB) worth confirming is worthwhile before running.
+
+**Outcome: dead end, but not our network policy this time.** The automated
+check hit Cloudflare's bot-protection challenge page ("Just a moment...",
+HTTP 403) - `data.mendeley.com` screens out non-browser requests generally,
+which would affect Colab too, not just this dev session. Not worth building
+a browser-automation workaround for a single metadata check. Left the
+Section 8 cells in the notebook as a documented dead end rather than
+deleting them.
+
+## Third candidate: Chula-RBC-12-Dataset (Zenodo, user-sourced)
+
+User found and proposed **Chula-RBC-12-Dataset** (Naruenatthanaset et al.,
+"Red Blood Cell Segmentation with Overlapping Cell Separation and
+Classification on Imbalanced Dataset," arXiv:2012.01321, 2021), hosted at
+https://zenodo.org/records/5638201. Per the dataset's own page (confirmed by
+the user, not fetched by Claude - `zenodo.org` is still blocked here): 706
+whole blood-smear images (640x480), >20,000 individually labeled RBCs across
+12 shape classes, with **class 0 explicitly defined as "Normal cell"** - a
+real healthy-comparison label, not a proxy this time. ~58 MB download.
+
+**License status: partially confirmed, needs the user's eyes on one more
+detail.** The dataset's GitHub repo (`Chula-PIC-Lab/Chula-RBC-12-Dataset`)
+has an MIT License file (confirmed via `raw.githubusercontent.com`, which is
+reachable from this dev session unlike Kaggle/Zenodo's own pages) - MIT is
+permissive: use, modify, and redistribute freely, just keep the copyright
+and license notice. **However**, Zenodo lists the *dataset's* license
+separately as `"Other (Open)"`, which is not necessarily the same scope as
+the code repo's MIT license. Claude could not load the Zenodo page directly
+to check whether it states the same MIT terms for the actual image/label
+files. **Open item: user to confirm the exact wording of the Zenodo page's
+"License" section.**
+
+**Citation requirement:** the dataset requires citing the arXiv paper above
+if used - to be included in the project's README/references regardless of
+final licensing outcome.
+
+**Status: download + inspection added to the notebook (Section 9), not yet
+run.** Per the user's explicit instruction, this only downloads and inspects
+the label format for now - no extraction of "Normal cell" crops/coordinates
+until we've actually seen the annotation file format (the GitHub README
+only says each label line is "x coordinate, y coordinate, type of RBC in
+number," without specifying the file format - YOLO-style txt, XML, JSON, or
+CSV - or whether it's one file per image or one master file). Waiting on the
+Colab run's output before writing any extraction code.
