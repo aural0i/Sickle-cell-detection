@@ -1,0 +1,23 @@
+# Data (downloaded separately via src/download_data.py - do not commit raw images)
+/data/train_source/*
+/data/external_val/*
+!/data/train_source/.gitkeep
+!/data/external_val/.gitkeep
+
+# Model checkpoints (can be large; track via release/artifact storage instead)
+/models/*.pt
+/models/*.pth
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# OS
+.DS_Store
+
+# Credentials - never commit
+kaggle.json
+.env
