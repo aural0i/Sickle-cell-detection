@@ -63,7 +63,31 @@ here as the project progresses through its review checkpoints.
 
 License terms and scientific compatibility for all datasets are being
 verified before any claims are made based on them - see
-[`docs/dataset_findings.md`](docs/dataset_findings.md) for current findings.
+[`docs/dataset_findings.md`](docs/dataset_findings.md) for current findings
+and [`docs/citations.md`](docs/citations.md) for full citations.
+
+## Data licensing policy
+
+Not every dataset used here comes with a fully clear, unambiguous license.
+Rather than assume the most permissive reading, this project follows one
+consistent rule for any dataset whose redistribution/derivative-work rights
+aren't clearly spelled out:
+
+- Using it for training/internal evaluation and reporting aggregate metrics
+  (accuracy, sensitivity, etc.) is fine.
+- Publicly displaying raw or derived images from that dataset (example
+  crops, error-analysis figures, Grad-CAM overlays) is not, unless its
+  license clearly permits derivative works.
+- The dataset is always cited properly regardless of its license status
+  (see `docs/citations.md`).
+- Nothing under `data/` is ever committed to this repo for any dataset -
+  only fetched on demand via the notebooks/scripts here - which keeps
+  redistribution out of the question entirely.
+
+This currently applies to erythrocytesIDB (CC BY-NC-ND - no derivatives)
+and the Chula-RBC-12-Dataset (Zenodo license listed only as `"Other (Open)"`,
+no further terms given). See `docs/dataset_findings.md` for the specifics
+behind each.
 
 ## Limitations
 

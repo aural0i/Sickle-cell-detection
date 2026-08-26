@@ -226,21 +226,48 @@ whole blood-smear images (640x480), >20,000 individually labeled RBCs across
 12 shape classes, with **class 0 explicitly defined as "Normal cell"** - a
 real healthy-comparison label, not a proxy this time. ~58 MB download.
 
-**License status: partially confirmed, needs the user's eyes on one more
-detail.** The dataset's GitHub repo (`Chula-PIC-Lab/Chula-RBC-12-Dataset`)
-has an MIT License file (confirmed via `raw.githubusercontent.com`, which is
-reachable from this dev session unlike Kaggle/Zenodo's own pages) - MIT is
-permissive: use, modify, and redistribute freely, just keep the copyright
-and license notice. **However**, Zenodo lists the *dataset's* license
-separately as `"Other (Open)"`, which is not necessarily the same scope as
-the code repo's MIT license. Claude could not load the Zenodo page directly
-to check whether it states the same MIT terms for the actual image/label
-files. **Open item: user to confirm the exact wording of the Zenodo page's
-"License" section.**
+**License status: confirmed ambiguous - resolved by policy, not by assumption.**
+The dataset's GitHub repo (`Chula-PIC-Lab/Chula-RBC-12-Dataset`) has an MIT
+License file (confirmed via `raw.githubusercontent.com`) - permissive: use,
+modify, and redistribute freely, just keep the copyright and license notice.
+But the user checked the Zenodo page directly (the dataset's actual,
+authoritative source) and its License section reads, in full:
 
-**Citation requirement:** the dataset requires citing the arXiv paper above
-if used - to be included in the project's README/references regardless of
-final licensing outcome.
+> "Other (Open)" with "No further description."
+
+No license text, no link to one - just that label. **We are not assuming
+the code repo's MIT license extends to the dataset itself.** These are
+different things (a GitHub repo's LICENSE file covers the repo's code by
+default, not necessarily data hosted elsewhere), and Zenodo's own listing is
+the authoritative statement for the dataset content.
+
+**Resulting policy for this dataset** (matches how we're already handling
+erythrocytesIDB's restrictive license - a consistent, conservative rule
+rather than a special case):
+
+1. **Use it for training/internal evaluation.** The authors published it
+   openly on Zenodo with an accompanying paper that explicitly invites reuse
+   in exchange for citation - that's a reasonable basis for research use,
+   even without a fully specified redistribution license.
+2. **Always cite it properly** wherever the dataset or any results derived
+   from it are mentioned - see `docs/citations.md` for the full citation.
+   Full author credit: Naruenatthanaset, K., Chalidabhongse, T. H.,
+   Palasuwan, D., Anantrasirichai, N., & Palasuwan, A. (2021). "Red Blood
+   Cell Segmentation with Overlapping Cell Separation and Classification on
+   Imbalanced Dataset." arXiv:2012.01321. (Confirmed from the dataset repo's
+   own citation block, not guessed.)
+3. **Never redistribute the raw dataset files ourselves.** Already true for
+   every dataset in this project (nothing under `data/` is committed - see
+   `.gitignore`); this sidesteps the redistribution-rights question entirely.
+4. **Don't publicly display raw or derived images from this dataset**
+   (example crops, error-analysis figures, Grad-CAM overlays) in the public
+   portfolio, since we don't have explicit derivative-works permission.
+   Aggregate metrics/numbers are fine to publish; example images from this
+   specific dataset are not, unless this gets clarified later.
+5. If more certainty is wanted before publishing anything derived from this
+   dataset, the option remains to email the paper's authors directly for
+   explicit written permission - not required for the current plan, but
+   available if the user wants it.
 
 **Status: download + inspection added, not yet run.** This lives in its own
 standalone notebook, `notebooks/02_healthy_comparison_chula_rbc12.ipynb`
