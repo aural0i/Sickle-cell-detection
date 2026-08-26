@@ -242,11 +242,14 @@ files. **Open item: user to confirm the exact wording of the Zenodo page's
 if used - to be included in the project's README/references regardless of
 final licensing outcome.
 
-**Status: download + inspection added to the notebook (Section 9), not yet
-run.** Per the user's explicit instruction, this only downloads and inspects
-the label format for now - no extraction of "Normal cell" crops/coordinates
-until we've actually seen the annotation file format (the GitHub README
-only says each label line is "x coordinate, y coordinate, type of RBC in
-number," without specifying the file format - YOLO-style txt, XML, JSON, or
-CSV - or whether it's one file per image or one master file). Waiting on the
-Colab run's output before writing any extraction code.
+**Status: download + inspection added, not yet run.** This lives in its own
+standalone notebook, `notebooks/02_healthy_comparison_chula_rbc12.ipynb`
+(doesn't depend on `01_setup_and_inspect.ipynb` at all, to avoid the
+copy-paste/cell-sync issues we ran into earlier). Per the user's explicit
+instruction, it only downloads and inspects the label format for now - no
+extraction of "Normal cell" crops/coordinates until we've actually seen the
+annotation file format (the GitHub README only says each label line is
+"x coordinate, y coordinate, type of RBC in number," without specifying the
+file format - YOLO-style txt, XML, JSON, or CSV - or whether it's one file
+per image or one master file). Waiting on the Colab run's output before
+writing any extraction code.

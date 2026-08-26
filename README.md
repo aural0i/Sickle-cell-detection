@@ -39,10 +39,13 @@ pip install -r requirements.txt
 1. Open [`notebooks/01_setup_and_inspect.ipynb`](notebooks/01_setup_and_inspect.ipynb)
    in Google Colab (`Runtime > Change runtime type > GPU`).
 2. Run the cells top to bottom. You'll need a Kaggle API token
-   (`kaggle.json`, from https://www.kaggle.com/settings/account) when prompted.
-3. This downloads both datasets into separate folders and prints their
-   structure, class counts, image properties, and any bundled license/README
-   files, without training anything.
+   (the `KGAT_...` kind, from https://www.kaggle.com/settings/api) when prompted.
+3. This downloads the primary and external-validation datasets into separate
+   folders and prints their structure, class counts, image properties, and
+   any bundled license/README files, without training anything.
+4. Separately, [`notebooks/02_healthy_comparison_chula_rbc12.ipynb`](notebooks/02_healthy_comparison_chula_rbc12.ipynb)
+   is a standalone notebook (no GPU needed, no dependency on notebook 01)
+   that downloads and inspects a candidate healthy-comparison dataset.
 
 Further notebooks/scripts (data splitting, training, evaluation) will be added
 here as the project progresses through its review checkpoints.
@@ -52,11 +55,15 @@ here as the project progresses through its review checkpoints.
 - **Primary:** Sickle Cell Disease Dataset (Tushabe et al.), via Kaggle
   (`florencetushabe/sickle-cell-disease-dataset`)
 - **Potential external validation:** erythrocytesIDB, via Zenodo
-  (record 18299474)
+  (record 18299474) - found not to have a healthy/normal comparison group
+  (see `docs/dataset_findings.md`)
+- **Candidate healthy-comparison dataset:** Chula-RBC-12-Dataset
+  (Naruenatthanaset et al., arXiv:2012.01321), via Zenodo (record 5638201) -
+  under evaluation
 
-License terms and scientific compatibility for both are being verified before
-any external validation claims are made - see `docs/` for findings once
-available.
+License terms and scientific compatibility for all datasets are being
+verified before any claims are made based on them - see
+[`docs/dataset_findings.md`](docs/dataset_findings.md) for current findings.
 
 ## Limitations
 
