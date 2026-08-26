@@ -18,8 +18,10 @@ scikit-learn==1.5.1
 scikit-image==0.24.0
 
 # --- Data acquisition ---
-kaggle==1.6.17          # Kaggle API for dataset download
-requests==2.32.3        # for fetching external (Zenodo) dataset
+kaggle==2.2.4            # Kaggle API for dataset download (2.x required for the
+                          # newer KAGGLE_API_TOKEN auth method; older 1.6.x only
+                          # supports the legacy kaggle.json flow)
+requests==2.32.3         # for fetching external (Zenodo) dataset
 
 # --- Duplicate / near-duplicate detection ---
 imagehash==4.3.1
