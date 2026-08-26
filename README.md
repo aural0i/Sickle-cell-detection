@@ -46,9 +46,15 @@ pip install -r requirements.txt
 4. Separately, [`notebooks/02_healthy_comparison_chula_rbc12.ipynb`](notebooks/02_healthy_comparison_chula_rbc12.ipynb)
    is a standalone notebook (no GPU needed, no dependency on notebook 01)
    that downloads and inspects a candidate healthy-comparison dataset.
+5. [`notebooks/03_data_pipeline.ipynb`](notebooks/03_data_pipeline.ipynb)
+   (also standalone, no GPU needed) builds the leakage-safe train/CV/test
+   split for the primary dataset and demonstrates the augmentation
+   pipeline - see [`docs/data_pipeline.md`](docs/data_pipeline.md) for the
+   full reasoning behind the split strategy, class-imbalance handling, and
+   why each augmentation is biologically reasonable.
 
-Further notebooks/scripts (data splitting, training, evaluation) will be added
-here as the project progresses through its review checkpoints.
+Further notebooks/scripts (training, evaluation) will be added here as the
+project progresses through its review checkpoints.
 
 ## Datasets
 
