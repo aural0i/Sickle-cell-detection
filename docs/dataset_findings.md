@@ -269,14 +269,56 @@ rather than a special case):
    explicit written permission - not required for the current plan, but
    available if the user wants it.
 
-**Status: download + inspection added, not yet run.** This lives in its own
-standalone notebook, `notebooks/02_healthy_comparison_chula_rbc12.ipynb`
-(doesn't depend on `01_setup_and_inspect.ipynb` at all, to avoid the
-copy-paste/cell-sync issues we ran into earlier). Per the user's explicit
-instruction, it only downloads and inspects the label format for now - no
-extraction of "Normal cell" crops/coordinates until we've actually seen the
-annotation file format (the GitHub README only says each label line is
-"x coordinate, y coordinate, type of RBC in number," without specifying the
-file format - YOLO-style txt, XML, JSON, or CSV - or whether it's one file
-per image or one master file). Waiting on the Colab run's output before
-writing any extraction code.
+### Download + inspection results (from the user's Colab run)
+
+**Folder structure:**
+```
+data/healthy_comparison/Chula-PIC-Lab-Chula-RBC-12-Dataset-2dcae70/
+  README.md, LICENSE, .DS_Store (macOS artifact, ignore)
+  Dataset/   706 whole-smear .jpg images (640x480), named 1.jpg, 2.jpg, ...
+  Label/     591 .txt annotation files, named to match (1.txt <-> 1.jpg, etc.)
+```
+
+**Label format confirmed:** plain text, one file per image, one line per
+labeled cell: `x y class_number` (space-separated integers). No header, no
+other metadata per line.
+
+**Full class list** (from the repo's own README - note it lists **16**
+classes, 0-15, despite the dataset being named "...-12-..."; a naming/doc
+inconsistency on the source's end, not something we need to resolve):
+
+| # | Class | # | Class | # | Class | # | Class |
+|---|---|---|---|---|---|---|---|
+| 0 | Normal cell | 4 | Target cell | 8 | Burr cell | 12 | Hypochromia |
+| 1 | Macrocyte | 5 | Stomatocyte | 9 | **Sickle cell** | 13 | Polychromasia |
+| 2 | Microcyte | 6 | Ovalocyte | 10 | Schistocyte | 14 | Keratocyte |
+| 3 | Spherocyte | 7 | Teardrop | 11 | uncategorised | 15 | Acanthocyte |
+
+**Important finding - reframes this dataset's role.** Class 9 is explicitly
+**"Sickle cell,"** alongside class 0 "Normal cell," both cell-level, from
+the same acquisition/labeling process. Unlike erythrocytesIDB's shape-only
+proxy labels (circular/elongated/other, no disease framing), this dataset
+has a direct sickle-vs-normal cell-level label pair. **This may be worth
+reconsidering as a real external validation source for the core task, not
+just a healthy-comparison supplement** - flagged for discussion with the
+user rather than decided here.
+
+**Data-quality observations:**
+- **706 images but only 591 label files** - roughly 115 images (~16%) have
+  no annotations and can't contribute any labeled crops.
+- Spot-checking 3 example label files showed very different compositions:
+  one was ~96% class 0, one was a mix of several classes, and one
+  (`100.txt`) was **100% class 3 (Spherocyte)** across all ~89 of its
+  labeled cells. This suggests images aren't uniformly/randomly sampled -
+  some appear curated to showcase a specific abnormality. **Consequence:**
+  if we extract per-cell crops from this dataset, crops from the same
+  source image are correlated and must be kept together during any
+  train/val/test split - the same leakage principle already documented for
+  the primary dataset.
+
+**Status: exact class-0/class-9 totals not yet known.** The 3 spot-checked
+files aren't enough to know the real counts. Added a full parsing/tallying
+cell to the notebook (counts every line in all 591 label files, per class,
+plus per-image concentration stats) - still just counting, no image
+cropping yet. Waiting on that output before deciding if the sample is large
+enough and before writing any actual crop-extraction code.
