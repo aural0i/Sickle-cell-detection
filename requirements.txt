@@ -7,8 +7,16 @@
 # Install with: pip install -r requirements.txt
 
 # --- Core deep learning ---
-torch==2.5.1
-torchvision==0.20.1
+# NOT pinned to exact versions: torch/torchvision must match your specific
+# CUDA build, and Google Colab already ships a GPU-matched pair preinstalled
+# (reinstalling a hard-pinned version there commonly fails or breaks GPU
+# support - this bit us once already). In notebooks/, we deliberately skip
+# reinstalling these two in Colab and just use what's already there.
+# For a from-scratch GPU machine (not Colab), pick the right command for your
+# CUDA version from https://pytorch.org/get-started/locally/ instead of
+# installing the bare minimums below.
+torch>=2.5
+torchvision>=0.20
 
 # --- Data handling / numerics ---
 numpy==1.26.4
