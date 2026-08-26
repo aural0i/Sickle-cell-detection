@@ -316,9 +316,61 @@ user rather than decided here.
   train/val/test split - the same leakage principle already documented for
   the primary dataset.
 
-**Status: exact class-0/class-9 totals not yet known.** The 3 spot-checked
-files aren't enough to know the real counts. Added a full parsing/tallying
-cell to the notebook (counts every line in all 591 label files, per class,
-plus per-image concentration stats) - still just counting, no image
-cropping yet. Waiting on that output before deciding if the sample is large
-enough and before writing any actual crop-extraction code.
+### Full class tally (from the user's Colab run - real numbers, not spot-checked)
+
+21,105 total annotations parsed across all 591 label files, 0 malformed
+lines (matches the README's ">20,000" claim - good consistency check).
+
+| Class | Count | Class | Count | Class | Count | Class | Count |
+|---|---|---|---|---|---|---|---|
+| 0 Normal cell | **6,330** | 4 Target cell | 2,753 | 8 Burr cell | 785 | 12 Hypochromia | 1,063 |
+| 1 Macrocyte | 689 | 5 Stomatocyte | 1,996 | 9 **Sickle cell** | **4** | 13 Polychromasia | 37 |
+| 2 Microcyte | 461 | 6 Ovalocyte | 2,140 | 10 Schistocyte | 897 | 14 Keratocyte | 4 |
+| 3 Spherocyte | 3,449 | 7 Teardrop | 307 | 11 uncategorised | 184 | 15 Acanthocyte | 6 |
+
+**Sickle cell (class 9): resolved as unusable.** Only 4 annotations total,
+**all four from a single source image** (346 images contain Normal cells;
+only 1 image contains any Sickle-cell annotation, mean/min/max all = 4).
+n=4 from one image is not a usable sample by any standard - not even for a
+heavily-caveated qualitative check. **This closes the "reconsider as a real
+external validation source" question from above: no**, not via this
+dataset's own Sickle-cell label. Good that this was left open rather than
+committed to before seeing real numbers.
+
+**Normal cell (class 0): confirmed large enough.** 6,330 individual
+annotations across 346 independent source images (min 1, max 128, mean
+18.3, median 6.5 per contributing image) - for comparison, the primary
+dataset's entire negative class is 147 images. This is a genuinely large,
+independent healthy-comparison sample. The wide per-image range (1 to 128)
+reconfirms the earlier leakage note: crops must be grouped by source image
+when split, not treated as independent samples.
+
+### Open design decision (not yet resolved)
+
+Two things still need a decision before writing extraction code:
+
+1. **How to fold the Normal-cell crops into the evaluation pipeline.**
+   Chula-RBC-12 alone can't give us a full sickle-vs-normal external
+   validation (no usable positive class). Options to weigh with the user:
+   - **Specificity-only check:** use Chula-RBC-12's Normal cells alone, as
+     an independent check of false-positive rate on genuinely healthy
+     cells from a source the model never trained on. Single-source, clean,
+     but doesn't test sensitivity.
+   - **Combine with erythrocytesIDB's "elongated" cells as a proxy
+     positive class**, forming an assembled two-source external check
+     covering both directions. Must be heavily caveated: the positive and
+     negative arms would come from different countries, stains, cameras,
+     and magnifications, so any performance difference could reflect
+     dataset-source artifacts rather than real morphology - a confound
+     that needs to be disclosed prominently, not glossed over.
+   - Keep the two as **separate, independently-reported exploratory
+     checks** rather than combining into one dataset/metric - avoids the
+     cross-source confound of the combined option while still using both.
+2. **Crop size around each labeled point.** Labels are single (x, y)
+   center coordinates, not bounding boxes - a crop size/box radius needs to
+   be chosen (e.g. based on typical RBC pixel size in these 640x480 images)
+   before any actual image cropping happens. Not decided yet.
+
+**Nothing has been extracted or wired into training/evaluation.** Per the
+user's instruction, this remains at the inspection/counting stage until
+these two decisions are made.
