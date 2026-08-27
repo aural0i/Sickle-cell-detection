@@ -61,10 +61,11 @@ source dataset's labels are fine. The real issue was the near-duplicate
 threshold (5) being too loose for this image domain - blood smear photos
 share enough overall visual structure (similar staining, similar framing)
 that phash doesn't discriminate between them as well as it does for
-ordinary photos. **Fix:** `DEFAULT_NEAR_DUP_THRESHOLD` in
-`src/data/duplicates.py` tightened from 5 to 2. Re-running Sections 4/4b
-after this fix should be expected to show 0 cross-class groups; if any
-remain, that would need a fresh look.
+ordinary photos. **Fix confirmed working.** After tightening `DEFAULT_NEAR_DUP_THRESHOLD` from
+5 to 2 in `src/data/duplicates.py` and re-running against the real dataset:
+569 images -> 562 distinct groups (7 images in same-class-only clusters:
+two negative/negative pairs, one negative/negative pair, and three
+positive-only clusters), **0 cross-class groups**. Closed.
 
 ## Validation vs. cross-validation: how they relate
 
