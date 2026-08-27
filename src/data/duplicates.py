@@ -17,7 +17,17 @@ from collections import defaultdict
 import imagehash
 from PIL import Image
 
-DEFAULT_NEAR_DUP_THRESHOLD = 5  # Hamming distance on the default 64-bit phash
+# Hamming distance on the default 64-bit phash. Originally 5, tightened to 2
+# after running against the real primary dataset: threshold 5 merged several
+# pairs of visually distinct, differently-labeled images (blood smear photos
+# share enough overall structure - similar staining, similar framing - that
+# phash doesn't discriminate between them as well as it does for ordinary
+# photos). All the false-positive matches found landed at exactly distance 4,
+# and zero exact-hash duplicates exist in this dataset to calibrate against,
+# so 2 is a deliberately conservative bar: catches near-identical copies
+# (e.g. a recompressed/resized duplicate) while erring toward NOT merging
+# genuinely different images. See docs/data_pipeline.md for the full story.
+DEFAULT_NEAR_DUP_THRESHOLD = 2
 
 
 def file_hash(path, algo="sha256"):

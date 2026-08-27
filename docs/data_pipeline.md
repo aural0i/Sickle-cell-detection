@@ -50,10 +50,21 @@ because blood smear images are visually homogeneous overall, which would be
 harmless, or (b) an actual labeling problem in the source Kaggle dataset -
 the same photo present under both labels, which would be a real data
 quality issue affecting confidence in the labels generally, not just these
-few images. Added cells to the notebook (4b) that check exact-hash status
-and display each cross-class group's images side by side to distinguish
-these. **Not yet resolved - waiting on that visual check before treating
-the current grouping as final.**
+few images.
+
+**Resolved: (a), a perceptual-hash false positive - not a labeling
+problem.** None of the 6 cross-class pairs were exact file matches, all
+landed at exactly phash distance 4 (suspiciously uniform for supposedly
+independent near-duplicates), and the user visually confirmed the paired
+images are genuinely different photos, not the same picture twice. The
+source dataset's labels are fine. The real issue was the near-duplicate
+threshold (5) being too loose for this image domain - blood smear photos
+share enough overall visual structure (similar staining, similar framing)
+that phash doesn't discriminate between them as well as it does for
+ordinary photos. **Fix:** `DEFAULT_NEAR_DUP_THRESHOLD` in
+`src/data/duplicates.py` tightened from 5 to 2. Re-running Sections 4/4b
+after this fix should be expected to show 0 cross-class groups; if any
+remain, that would need a fresh look.
 
 ## Validation vs. cross-validation: how they relate
 
