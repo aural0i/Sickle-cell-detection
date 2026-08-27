@@ -114,3 +114,31 @@ produce that CSV (no GPU, no dataset access - see `environment.md`). The
 notebook saves the resulting split assignment to
 `results/splits/primary_dataset_splits.csv` when run in Colab; if useful as
 a committed artifact, send that file back and it can be added to the repo.
+
+## Lessons learned: pip install hangs in Colab
+
+While running notebook 03, a `pip install -q -r <filtered requirements.txt>`
+cell ran for 20+ minutes without finishing (user reported it, correctly
+flagged as not normal). Root cause: `requirements.txt` hard-pinned exact
+versions of packages (numpy, pandas, Pillow, scikit-learn, scikit-image,
+matplotlib, seaborn, tqdm) that Colab already ships - at different,
+newer versions - as part of its base image. Forcing pip to reconcile old
+exact pins against a large pre-existing environment sends its dependency
+resolver into extensive backtracking, which can run far longer than 20
+minutes or effectively never finish. This is the same underlying issue as
+the earlier `torchvision==0.20.1` install failure, just recurring across a
+wider set of packages once the notebook tried to install "everything except
+torch/torchvision" instead of "everything except what Colab already has."
+
+**Fix:** notebooks 01 and 03 now install only the packages Colab genuinely
+doesn't ship by default (`kaggle`, and `imagehash` for notebook 03), with no
+version pins, instead of installing from `requirements.txt` at all inside
+Colab. `requirements.txt` itself was also changed from exact `==` pins to
+`>=` floors throughout, both to reflect that Colab's own versions are fine
+and to reduce (not eliminate) this same risk for anyone installing it on a
+from-scratch, non-Colab machine.
+
+**If a future notebook needs a new package:** add it directly to that
+notebook's install cell (unpinned, e.g. `!pip install -q grad-cam`) rather
+than pointing at `requirements.txt` - and only add it to `requirements.txt`
+for the from-scratch/non-Colab reproducibility story.

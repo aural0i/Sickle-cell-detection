@@ -1,49 +1,62 @@
 # Sickle Cell Detection (Research/Portfolio Project) - Python dependencies
 #
-# This file pins major/minor versions so the environment is reproducible.
-# Recommended target: Google Colab (free GPU tier) - see docs/environment.md
-# for why this project is not run on CPU-only compute.
+# Two different situations this file needs to serve:
 #
-# Install with: pip install -r requirements.txt
+# 1. A from-scratch machine (not Colab): install everything below with
+#    `pip install -r requirements.txt`.
+#
+# 2. Google Colab (the actual dev target for this project - see
+#    docs/environment.md): Colab already ships current, mutually-compatible
+#    versions of numpy/pandas/Pillow/scikit-learn/scikit-image/matplotlib/
+#    seaborn/tqdm/requests/torch/torchvision. Reinstalling this file's exact
+#    pins on top of that has twice now caused pip's dependency resolver to
+#    hang for 20+ minutes trying to reconcile old pins against a much newer
+#    pre-existing environment (see docs/data_pipeline.md "lessons learned").
+#    So in Colab, the notebooks install ONLY the few packages Colab doesn't
+#    already ship (currently: kaggle, imagehash, and later grad-cam), with
+#    no version pins at all, rather than installing from this file directly.
+#    Do not change the notebooks back to `pip install -r requirements.txt`
+#    without re-reading that note.
+#
+# Version numbers below are floors (>=), not exact pins, on purpose - exact
+# pins are what caused the resolver hangs described above.
 
 # --- Core deep learning ---
-# NOT pinned to exact versions: torch/torchvision must match your specific
-# CUDA build, and Google Colab already ships a GPU-matched pair preinstalled
-# (reinstalling a hard-pinned version there commonly fails or breaks GPU
-# support - this bit us once already). In notebooks/, we deliberately skip
-# reinstalling these two in Colab and just use what's already there.
-# For a from-scratch GPU machine (not Colab), pick the right command for your
-# CUDA version from https://pytorch.org/get-started/locally/ instead of
-# installing the bare minimums below.
+# Not pinned at all: torch/torchvision must match your specific CUDA build.
+# Colab ships a GPU-matched pair preinstalled - use that, don't reinstall.
+# For a from-scratch GPU machine, use the right command for your CUDA
+# version from https://pytorch.org/get-started/locally/ instead of the
+# generic line below.
 torch>=2.5
 torchvision>=0.20
 
-# --- Data handling / numerics ---
-numpy==1.26.4
-pandas==2.2.2
-Pillow==10.4.0
-scikit-learn==1.5.1
-scikit-image==0.24.0
+# --- Data handling / numerics --- (Colab already provides all of these)
+numpy>=1.26
+pandas>=2.2
+Pillow>=10.4
+scikit-learn>=1.5
+scikit-image>=0.24
 
 # --- Data acquisition ---
-kaggle==2.2.4            # Kaggle API for dataset download (2.x required for the
-                          # newer KAGGLE_API_TOKEN auth method; older 1.6.x only
-                          # supports the legacy kaggle.json flow)
-requests==2.32.3         # for fetching external (Zenodo) dataset
+kaggle>=2.2.4             # NOT in Colab by default - always install.
+                           # 2.x is required for the newer KAGGLE_API_TOKEN
+                           # auth method; older 1.6.x only supports the
+                           # legacy kaggle.json flow.
+requests>=2.32             # Colab already provides this.
 
 # --- Duplicate / near-duplicate detection ---
-imagehash==4.3.1
+imagehash>=4.3             # NOT in Colab by default - always install.
 
-# --- Visualization ---
-matplotlib==3.9.1
-seaborn==0.13.2
+# --- Visualization --- (Colab already provides both of these)
+matplotlib>=3.9
+seaborn>=0.13
 
 # --- Interpretability (Grad-CAM) ---
-grad-cam==1.5.4
+grad-cam>=1.5              # NOT in Colab by default - always install.
 
 # --- Experiment tracking / progress ---
-tqdm==4.66.4
+tqdm>=4.66                 # Colab already provides this.
 
-# --- Reproducibility / notebook use ---
-jupyter==1.0.0
-ipywidgets==8.1.3
+# --- Reproducibility / notebook use (only relevant outside Colab) ---
+jupyter>=1.0
+ipywidgets>=8.1
