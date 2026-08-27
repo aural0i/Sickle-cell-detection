@@ -52,8 +52,15 @@ pip install -r requirements.txt
    pipeline - see [`docs/data_pipeline.md`](docs/data_pipeline.md) for the
    full reasoning behind the split strategy, class-imbalance handling, and
    why each augmentation is biologically reasonable.
+6. [`notebooks/04_cross_validation.ipynb`](notebooks/04_cross_validation.ipynb)
+   (standalone, **GPU needed**) runs grouped 5-fold cross-validation for
+   both ResNet18 and MobileNetV2 under an identical staged transfer-learning
+   protocol, to compare them before committing to final training - see
+   [`docs/training.md`](docs/training.md) for the staged transfer-learning
+   plan, hyperparameters, and why CV is a separate checkpoint from final
+   training rather than one continuous run.
 
-Further notebooks/scripts (training, evaluation) will be added here as the
+Further notebooks/scripts (final training, evaluation) will be added here as the
 project progresses through its review checkpoints.
 
 ## Datasets
