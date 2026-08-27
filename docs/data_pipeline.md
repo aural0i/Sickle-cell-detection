@@ -35,6 +35,26 @@ cannot catch two *different* photos taken from the same patient's slide.
 That residual leakage risk stays documented as an open limitation, not
 resolved by this step.
 
+### Open finding: cross-class duplicate groups (under investigation)
+
+Running this against the real dataset (569 images) found 544 distinct
+groups - 25 images cluster with at least one other image. Most of those
+clusters are internally consistent (all-positive or all-negative), but
+**6 groups contain both a positive- and a negative-labeled image**:
+groups 34, 49, 92, 109, 119, and 131 (see the notebook output for exact
+filenames).
+
+This has two possible explanations with very different implications: (a) a
+perceptual-hash false positive - different photos that hash similarly
+because blood smear images are visually homogeneous overall, which would be
+harmless, or (b) an actual labeling problem in the source Kaggle dataset -
+the same photo present under both labels, which would be a real data
+quality issue affecting confidence in the labels generally, not just these
+few images. Added cells to the notebook (4b) that check exact-hash status
+and display each cross-class group's images side by side to distinguish
+these. **Not yet resolved - waiting on that visual check before treating
+the current grouping as final.**
+
 ## Validation vs. cross-validation: how they relate
 
 Defined once, used consistently, per the project brief's requirement not to
